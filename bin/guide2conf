@@ -49,8 +49,6 @@ $XTEVE_VERSION   = $ENV{'XTEVE_VERSION'};
 $GUIDE2GO_HOME        = $ENV{'GUIDE2GO_HOME'};
 $GUIDE2GO_CONF	      = $ENV{'GUIDE2GO_CONF'};
 $GUIDE2GO_LOG         = $ENV{'GUIDE2GO_LOG'};
-$GUIDE2GO_SERVER_HOST = $ENV{'GUIDE2GO_SERVER_HOST'};
-$GUIDE2GO_SERVER_PORT = $ENV{'GUIDE2GO_SERVER_PORT'};
 
 $PATH            = $ENV{'PATH'};
 $TZ              = $ENV{'TZ'};
@@ -72,6 +70,14 @@ GetOptions(
 $GUIDE2GO_CONFIG_NAME=~ s/.yaml//;
 $GUIDE2GO_CONFIG_NAME=~ s/.json//;
 $GUIDE2GO_CONFIG_NAME=~ s/.xml//;
+
+my $plexToken;
+open(my $fh, '<', '/mnt/plexToken') or die "cannot open file '/mnt/plexToken'";
+{
+	local $/;
+    $plexToken = <$fh>;
+}
+close($fh);
 
 if (defined $GUIDE2GO_XMLTV_PATH) {
 if (defined $GUIDE2GO_UID || $GUIDE2GO_PASSWD || $GUIDE2GO_CONFIG_NAME || $GUIDE2CONF_MAX_DAYS ) {
@@ -448,6 +454,8 @@ if ( $XTEVE_API ==1 ) {
 	print "\nExecuting: Update xTeVe XMLTV and XEPG data...\n";
 	system("/usr/bin/curl -X POST -H \"Content-Type: application/json\" -d \'{\"cmd\":\"update.xmltv\"}\' http://localhost:$XTEVE_PORT/api/");
 	system("/usr/bin/curl -X POST -H \"Content-Type: application/json\" -d \'{\"cmd\":\"update.xepg\"}\' http://localhost:$XTEVE_PORT/api/");
+	print "\nExecuting: Update Plex via API...\n";
+	system("/usr/bin/curl -k -X POST \"https://192.168.1.147:32400/livetv/dvrs/11/reloadGuide?X-Plex-Token=$plexToken\"");
 	exit(1);
 	}
 }
