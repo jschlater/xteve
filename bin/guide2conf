@@ -395,7 +395,7 @@ my ( $l_GUIDE2GO_CONFIG_PATH ) = @_;
 
 		if (defined $GUIDE2GO_SERVER_MODE) {
 		print "Executing: Info: Stopping Guide2go Token server running as PID: $GUIDE2GO_PID\n" unless $GUIDE2GO_PID eq "";
-                kill 9, "$GUIDE2GO_PID" unless $GUIDE2GO_PID eq "";
+                kill 9, $GUIDE2GO_PID unless $GUIDE2GO_PID eq "";
 		print "Executing: Info: Starting Image Token server on [$GUIDE2GO_SERVER_HOST:$GUIDE2GO_SERVER_PORT]...\n";
                 print "Executing: Info: XMLTV file will be built as background task. Please check $GUIDE2GO_LOG for progress...\n";
 		system("/sbin/su-exec $XTEVE_USER $XTEVE_BIN/guide2go -config $l_GUIDE2GO_CONFIG_PATH > $GUIDE2GO_LOG &");
@@ -414,7 +414,7 @@ my ( $l_GUIDE2GO_CONFIG_PATH ) = @_;
 
 		if (defined $GUIDE2GO_SERVER_MODE) {
 		print "Executing: Info: Stopping Guide2go Token server running as PID: $GUIDE2GO_PID\n" unless $GUIDE2GO_PID eq "";
-                kill 9, "$GUIDE2GO_PID" unless $GUIDE2GO_PID eq "";
+                kill 9, $GUIDE2GO_PID unless $GUIDE2GO_PID eq "";
 		print "Executing: Info: Starting Image Token server on [$GUIDE2GO_SERVER_HOST:$GUIDE2GO_SERVER_PORT]...\n";
                 print "Executing: Info: XMLTV file will be built as background task. Please check $GUIDE2GO_LOG for progress...\n";
 		system("$XTEVE_BIN/guide2go -config $l_GUIDE2GO_CONFIG_PATH > $GUIDE2GO_LOG &");
@@ -455,7 +455,7 @@ if ( $XTEVE_API ==1 ) {
 	system("/usr/bin/curl -X POST -H \"Content-Type: application/json\" -d \'{\"cmd\":\"update.xmltv\"}\' http://localhost:$XTEVE_PORT/api/");
 	system("/usr/bin/curl -X POST -H \"Content-Type: application/json\" -d \'{\"cmd\":\"update.xepg\"}\' http://localhost:$XTEVE_PORT/api/");
 	print "\nExecuting: Update Plex via API...\n";
-	system("/usr/bin/curl -k -X POST \"https://192.168.1.147:32400/livetv/dvrs/11/reloadGuide?X-Plex-Token=$plexToken\"");
+	system("/usr/bin/curl -k -X POST \"https://192.168.1.147:32400/livetv/dvrs/2/reloadGuide?X-Plex-Token=$plexToken\"");
 	exit(1);
 	}
 }
